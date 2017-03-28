@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>插入可拨打的电话</title>
+	<script src="../../libs/js/vue.min.js"></script>
+	<style>
+		.tel{
+			border-radius: 4px;
+			width: 150px;
+			border: 1px solid #ccc;
+			height: 24px;
+		}
+	</style>
+</head>
+<body>
+	<div id="phone">
+		<p style="margin: 30px 0 0 30px;">
+			<span>电话：</span><input class="tel" type="number" v-model="tel">
+		</p>
+	</div>
+	<script type="text/javascript" src="../internal.js"></script>
+	<script>
+		var phone = new Vue({
+			el: '#phone',
+			data: {
+				tel: ''
+			},
+			watch: {
+				tel: function(tel){
+					if(!tel||(tel&&!(/^[1][0-9]{10}$/.test(tel)||/^[0][0-9]{10,11}$/.test(tel)))){
+						dialog.content = '';
+					}else{
+						dialog.content = '<a href="tel:'+tel+'">'+tel+'</a>';
+					}
+				}
+			},
+			methods: {
+
+			}
+		})
+	</script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>插入视频</title>
+		<link rel="stylesheet" href="../../libs/css/bootstrap.min.css">
+		<script src="../../libs/js/jquery-1.11.3.min.js"></script>
+		<script src="../../libs/js/vue.min.js"></script>
+		<style>
+			.no-margin {
+				margin: 30px 24px 15px!important;
+			}
+			
+			input {
+				border-radius: 3px;
+				border: 1px solid #cccccc;
+				padding: 2px 5px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="video">
+			<form class="form-horizontal no-margin">
+				<div class="form-group">
+					<label class="col-xs-2 text-right control-label">视频网址</label>
+					<div class="col-xs-8">
+						<input type="text" class="form-control" v-model="video" placeholder="请输入视屏网址">
+					</div>
+				</div>
+				<div class="form-group">
+					<p>
+						<span>宽度:</span><input type="text" v-model="setwidth" placeholder="设置宽度(可以不设置)" />
+						<span>高度:</span><input type="text" v-model="setheight" placeholder="设置高度为200" />
+					</p>
+					<p class="text-color-red">视频网址来源是优酷，土豆，腾讯等里面的<strong style="color: red;">【通用代码】</strong>，默认设置 height=200 width=100%</p>
+				</div>
+				<div class="form-group no-margin">
+					<div v-html="video" class="video"></div>
+				</div>
+			</form>
+		</div>
+		<script type="text/javascript" src="../internal.js"></script>
+		<script>
+			var video = new Vue({
+				el: '#video',
+				data: {
+					merchantId: localStorage.getItem('merchantId'),
+					video: '',
+					setheight: '200',
+					setwidth: '100%',
+				},
+				ready: function() {},
+				watch: {
+					video: function(obj) {
+						$('.form-group iframe').css('height', this.setheight)
+						$('.form-group iframe').css('width', this.setwidth)
+						if(obj) {
+							this.video = $('.video').html()
+							dialog.content = this.video;
+						}
+					},
+					setheight: function(height) {
+						this.setheight = height;
+						$('.form-group iframe').css('height', this.setheight)
+						$('.form-group iframe').css('width', this.setwidth)
+						if(this.video) {
+							this.video = $('.video').html()
+							dialog.content = this.video;
+						}
+					},
+					setwidth: function(width) {
+						this.setwidth = width;
+						$('.form-group iframe').css('height', this.setheight)
+						$('.form-group iframe').css('width', this.setwidth)
+						if(this.video) {
+							this.video = $('.video').html()
+							dialog.content = this.video;
+						}
+					},
+				},
+				methods: {
+
+				}
+			});
+		</script>
+	</body>
+
+</html>

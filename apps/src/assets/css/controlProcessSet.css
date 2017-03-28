@@ -1,0 +1,244 @@
+.control-process-set {
+    margin: 0 20px;
+    min-height: 700px;
+    background: #FFFFFF;
+    border: 1px solid #CCCCCC;
+}
+.control-process-set .combo {
+    margin: 20px 0;
+}
+.control-process-set .combo .panel {
+    margin-bottom: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    width: 1024px;
+}
+.control-process-set .process-set {
+    border: 1px solid #CCCCCC;
+    background: #ffffff;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+}
+.combo .panel-heading > span:first-child {
+    font-weight: bold;
+}
+.combo .panel-body > span {
+    display: inline-block;
+    padding: 2px 12px 2px 14px;
+    margin: 0 8px;
+}
+.info-content .thumbnail {
+    max-height: 100px;
+    margin-bottom: 0;
+    margin-top: 20px;
+}
+.info-content p{
+    display: block;
+}
+.col-sm-4 {
+    white-space: nowrap;
+}
+.process-set {
+    min-width: 1024px;
+    width: 1024px;
+}
+.info-content .row {
+    padding-bottom: 10px;
+}
+.process-modal .modal-dialog {
+    width: 400px;
+}
+.process-grade {
+    position: relative;
+    border: 1px solid #e5e5e5;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    margin: 10px 0;
+    padding: 10px 0;
+}
+.process-grade .title {
+    width: 90px;
+    display: inline-block;
+    padding: 4px 6px;
+    text-align: right;
+    float: left;
+}
+.process-grade p {
+    padding: 2px 0;
+}
+.process-grade p i {
+    color: #cdd2d2;
+    font-size: 20px;
+}
+.process-grade textarea {
+    width: 260px;
+    float: left;
+    border: none;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+}
+.process-grade .change {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 30px;
+    height: 16px;
+    color: #1fbba6;
+    font-size: 12px;
+    cursor: pointer;
+}
+.process-grade .iconfont.active {
+    color: #45da9d;
+}
+.process-grade.active i,
+.process-grade.active textarea {
+    cursor: pointer;
+}
+.one-product {
+    position: relative;
+}
+.one-product i.error {
+    display: none;
+    content: '×';
+    position: absolute;
+    top: 0;
+    right: 0px;
+    width: 12px;
+    height: 12px;
+    text-align: center;
+    line-height: 10px;
+    background: red;
+    border-radius: 50%;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+.combo.active .one-product i.editor {
+    position: absolute;
+    top: 4px;
+    left: 0;
+    color: #5bc0de;
+}
+.combo.active .one-product i.error,
+.combo.active .one-product i.editor {
+    display: block;
+}
+.combo .one-product i.editor {
+    font-size: 12px;
+    display: none;
+}
+.combo.active .one-product {
+    border-bottom: 1px solid #c2c2c2;
+}
+.combo .panel-heading .price {
+    display: inline-block;
+    padding: 0 6px;
+}
+.combo .pay-type {
+    position: relative;
+    display: inline-block;
+}
+.combo .pay-type a {
+    color: #5bc0de;
+}
+.combo .pay-type ul {
+    display: none;
+    position: absolute;
+    top: 20px;
+    left: 0;
+    padding: 0;
+    font-size: 12px;
+    width: 80px;
+    background: #FFFFFF;
+    border: 1px solid #c2c2c2;
+    z-index: 99;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+.combo .pay-type:hover ul {
+    display: block;
+}
+.combo .pay-type ul:before {
+    position: absolute;
+    content: ' ';
+    border-bottom: 6px solid #c2c2c2;
+    border-right: 6px solid transparent;
+    border-left: 6px solid transparent;
+    top: -6px;
+    left: 18px;
+}
+.combo .pay-type ul li {
+    list-style: none;
+    padding: 4px 8px;
+    cursor: pointer;
+}
+.combo .pay-type ul li:hover {
+    color: #003366;
+}
+.product-block {
+}
+.product-block img {
+    width: 100%;
+    max-height: 120px;
+}
+.product-block .block-checkbox {
+    border: 1px solid;
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    margin: 5px;
+}
+
+.product-block .block-checkbox-active {
+    background: rebeccapurple;
+}
+
+.product-block .input-sm {
+    height: 25px;
+    line-height: 25px;
+    padding: 0px 5px;
+}
+
+.product-table input {
+    width: 60px;
+}
+.process-set .tips-info{
+    margin-top: 30px;
+    color: #5bc0de;
+}
+.form-control[readonly]{
+    background: none;
+}
+.form-control[readonly][disabled]{
+    background: #eee;
+}
+.ld-side-content{
+    margin-left: 0;
+}
+.form-horizontal .control-label{
+    text-align: left;
+}
+.process-line{
+    display: block;
+    display: block;
+    clear: both;
+    border-top: 1px dashed #ccc;
+}
+.form-horizontal .control-label{
+    text-align: right;
+}
+.balance-btn .dropdown-menu{
+    width: auto;
+    min-width: 78px;
+}
+.balance-btn .dropdown-menu li{
+    padding: 4px 8px;
+}
+.balance-btn .dropdown-menu li:hover{
+    background: #5bc0de;
+    color: #ffffff;
+}

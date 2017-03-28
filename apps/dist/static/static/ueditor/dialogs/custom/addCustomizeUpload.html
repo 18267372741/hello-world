@@ -1,0 +1,242 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" href="addCustomizeUpload.css">
+    <link rel="stylesheet" href="../../libs/css/bootstrap.min.css">
+    <script src="../../libs/js/jquery-1.11.3.min.js"></script>
+    <script src="../../libs/js/bootstrap.min.js"></script>
+    <script src="../../libs/js/vue.min.js"></script>
+    <script src="../../libs/js/common.js"></script>
+    <script src="../../libs/qiniu/plupload.full.min.js"></script>
+    <script src="../../libs/qiniu/qiniu.min.js"></script>
+    <title>上传图片</title>
+</head>
+<body>
+<div id="customizeUpload" class="content">
+    <div class="customize-pic clearfix">
+        <ul class="customize-list clearfix">
+            <template v-for="list in imgList">
+                <li class="{{list.checked?'active':''}}" data-index="{{$index}}" @click="choosePic">
+                    <img :src="qiniu.domain+list.imgUrl+'?imageView2/1/w/96/h/100'" title="{{list.name}}">
+                    <span class="ld-pic-del" title="删除" data-dir="{{list.imgUrl}}" @click="deleteFn($index, $event)" data-name="{{list.name}}">×</span>
+                </li>
+            </template>
+            <li>
+                <div class="customize-upload">
+                    <div id="container">
+                        <div v-el:qi-niu-container style="height: 100%;">
+                            <div class="btn btn-default" v-el:qi-niu-button>
+                                <i class="glyphicon glyphicon-plus"></i>
+                                <span>上传图片</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="page-attachment clearFix" v-if="imgList&&imgList.length">
+        <div class="pages">
+            <button type="button" class="js-next">下一页</button>
+        </div>
+    </div>
+</div>
+<!--页面中一定要引入internal.js为了能直接使用当前打开dialog的实例变量-->
+<!--internal.js默认是放到dialogs目录下的-->
+<script type="text/javascript" src="../internal.js"></script>
+<script>
+    var customizeUpload = new Vue({
+        el:'#customizeUpload',
+        data: {
+            merchantId: 'JS/admins110',
+            host: "http://www.17xiutu.com/",
+            qiniu: {
+                url: 'qiNiu/getToken',
+                name: 'JS/admins',
+                domain: 'http://ofw0ozozx.bkt.clouddn.com/',
+                dwUrl: 'qiNiu/bucketManagerFile',
+                dwParam: {
+                    marker: '',
+                    pageSize: 12
+                },
+                prevMarker: '',
+                curMarker: '',
+                nextMarker: ''
+            },
+            imgList: [],
+            tipHtml: '',
+            token: ''
+        },
+        created: function(){
+            this.getToken();
+            this.loadList();
+        },
+        ready: function(){
+
+        },
+        methods: {
+            /***
+             *上传图片
+             * @param option
+             * @param callback {callbackType: //回调类型属于进度回调还是成功回调}
+             */
+            uploadQNImg: function(){
+                const self = this;
+                const qiNiuContainer = this.$els.qiNiuContainer;
+                const qiNiuButton = this.$els.qiNiuButton;
+                const token = this.token;
+                const domain = this.qiniu.domain;
+                var Qiniu2 = new QiniuJsSDK();
+                var defaultOption = {
+                    runtimes: 'html5,flash,html4',      // 上传模式，依次退化
+                    browse_button: qiNiuButton,         // 上传选择的点选按钮，必需
+                    uptoken : token, // uptoken是上传凭证，由其他程序生成
+                    domain: domain,     // bucket域名，下载资源时用到，必需
+                    container: qiNiuContainer,             // 上传区域DOM ID，默认是browser_button的父元素
+                    get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的uptoken
+                    max_file_size: '1mb',             // 最大文件体积限制
+                    max_retries: 1,                     // 上传失败最大重试次数
+                    dragdrop: true,                     // 开启可拖曳上传
+                    chunk_size: '4mb',			// 分块上传时，每块的体积
+                    auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
+                    isCover: false,    					//是否覆盖,默认为不覆盖
+                    key: 'unPath',						//默认路径
+                    init: {
+                        'FilesAdded': function(up, files) {
+                            plupload.each(files, function(file) {
+                                // 文件添加进队列后，处理相关的事情
+                            });
+                        },
+                        'BeforeUpload': function(up, file) {
+                            // 每个文件上传前，处理相关的事情
+                        },
+                        'UploadProgress': function(up, file) {
+                            // 每个文件上传时，处理相关的事情
+                            file.callbackType = 'UploadProgress';
+                            self.$dispatch('child-qiniu-data', file);
+                        },
+                        'FileUploaded': function(up, file, info) {
+                            // 每个文件上传成功后，处理相关的事情
+                            // 其中info是文件上传成功后，服务端返回的json，形式如：
+                            // {
+                            //    "hash": "Fh8xVqod2MQ1mocfI4S4KpRL6D98",
+                            //    "key": "gogopher.jpg"
+                            //  }
+                            // 查看简单反馈
+                            var domain = up.getOption('domain');
+                            // var res = parseJSON(info);
+                            // var sourceLink = domain + res.key; 获取上传成功后的文件的Url
+                            info = JSON.parse(info);
+                            info.callbackType = 'FileUploaded';
+                            dialog.content = info;
+                            self.imgList.unshift({imgUrl: info.key});
+                        },
+                        'Error': function(up, err, errTip) {
+                            console.error("This Qiniu upload is failure");
+                            console.error(err);
+                            //上传出错时，处理相关的事情
+                            if(err.code==-600){
+                                $HQ.topRightInfoTips({content: '上传大小不能超过'+(defaultOption.max_file_size)});
+                            }
+                        },
+                        'UploadComplete': function() {
+                            //队列文件处理完毕后，处理相关的事情
+                        },
+                        'Key': function(up,file) {
+                            // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
+                            // 该配置必须要在unique_names: false，save_key: false时才生效
+                            var merchantId = self.merchantId
+                            merchantId = merchantId?merchantId:'888888';
+                            var key = merchantId;
+                            file.name = file.name.replace(/\./, '_'+new Date().getTime()+'.');
+                            key += '/'+file.name;
+                            return key
+                        }
+                    }
+                };
+                const uploader = Qiniu2.uploader(defaultOption);
+            },
+            getToken: function () {
+                var self = this;
+                var URL = this.host + this.qiniu.url;
+                $HQ.load(URL, '', function (data) {
+                    self.$set('token', data.data.result);
+                    self.$nextTick(function(){
+                        self.uploadQNImg();
+                    });
+                },'get');
+            },
+            //加载图片列表
+            loadList: function(type){
+                var self = this,
+                    url = this.host+this.qiniu.dwUrl,
+                    param = this.qiniu.dwParam,
+                    merchantId = this.merchantId;
+                merchantId = merchantId?merchantId:'888888';
+                param.prefix = merchantId;
+                if(type=='next'){
+                    param.marker = this.qiniu.nextMarker;
+                }else if(type=='prev'){
+                    if(!this.qiniu.curMarker){
+                        $HQ.topRightInfoTips({content: '已经是第一页了~~'});
+                        return false;
+                    }
+                    param.marker = this.qiniu.prevMarker;
+                }
+                $HQ.load(url, param, function(data){
+                    self.$set('imgList', data.data.list);
+                        self.$set('qiniu.prevMarker', self.qiniu.curMarker);
+                        self.$set('qiniu.curMarker', self.qiniu.nextMarker);
+                        self.$set('qiniu.nextMarker', data.marker);
+                    self.$nextTick(function(){
+                        self.picListPrevNext();
+                    });
+                },'get');
+            },
+            //选择图片
+            choosePic: function(e){
+                var data = e.target.tagName=='IMG'?$(e.target).parent().data():e.target.dataset,
+                    index = data.index,
+                    checked = this.imgList[index].checked?false:true;
+                this.$set('imgList['+index+'].checked', checked);
+                this.$set('imgList['+index+'].domain', this.qiniu.domain);
+                dialog.content = this.imgList;
+            },
+            //删除图片
+            deleteFn: function(index, e){
+                var self = this;
+                var $this = $(e.target).parent();
+                var data = $(e.target).data();
+                var url = self.host+'qiNiu/deleteFile';
+                var param = {
+                    key: data.dir
+                };
+                if(confirm('确定删除此图片，如果【确定】将从图片库里面删除，其余活动用了此图片将不能再显示此图片！')){
+                    $HQ.load(url, JSON.stringify(param), function(data){
+                        if(data.code==-1){
+                            $HQ.topRightInfoTips({content:'图片删除成功!'});
+                            self.imgList.splice(index,1);
+                        }
+                    });
+                }
+                e.stopPropagation();
+            },
+            /*图片列表上一页 下一页*/
+            picListPrevNext: function(){
+                var self = this;
+                $('.page-attachment').unbind().on('click', '.js-prev, .js-next', function(e){
+                    var type = '';
+                    if($(e.target).hasClass('js-next')){
+                        type = 'next';
+                    }else{
+                        type = 'prev';
+                    }
+                    self.loadList(type);
+                });
+            }
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+body {
+    background-color: #fff;
+}
+#alibaba-login-iframe {
+    padding: 0 160px 0 0;
+    position: absolute;
+    overflow: hidden;
+    left: 25%;
+    top: 30%;
+    border-right: solid 1px #d5d5d5;
+}
+#alibaba-login-iframe.iframe-show #alibaba-login-iframe-loading {
+    display: none;
+}
+#login {
+    width: 100%;
+    min-height: 700px;
+}
+.wangji{
+    position: absolute; bottom: 0; width:250px; overflow: hidden;
+}
+a.wangj{
+    float: left;
+}
+a.zhuce{
+    float: right;
+}
+.logo{
+    overflow: hidden;
+}
+.logo img{
+    width: 180px;
+}
+.logo a{
+    float: left;
+}
+.logo span{
+    border-left: solid 1px #d9d5d4; color: #d9d5d4; font-size: 24px; padding-left: 10px; float: right;
+    margin-top: 25px;
+}
+
+.QRcode{
+    position: absolute; overflow: hidden; left: 50%; top: 30%; width: 500px; text-align: center;
+}
+.tab{
+    overflow: hidden; padding-left: 80px;
+}
+.tab span{
+    float: left; border: solid 1px #d5d5d5; border-radius: 6px; padding: 12px 35px; margin-right: 16px;
+}
+.tab i{
+    font-size: 30px;
+}
+.QRcode1 img{
+    width: 200px; height: 200px; margin-top: 20px;
+}
+/*页脚*/
+.footer {
+    margin-top: 50px;
+    border-top: solid 1px #d5d5d5;
+    padding-top: 50px;
+    margin-bottom: 50px;
+    /* position: absolute; */
+    /* bottom: 0; */
+    /* width: 100%; */
+}
+.footer p{
+    text-align: center;
+}
+.announcement{
+    position: fixed; top: 0; color: white; background: deepskyblue; width: 100%; text-align: right;
+    line-height: 40px; font-family: "微软雅黑";list-style: none; margin-bottom: 0; height: 40px;
+}
+.announcement li{
+    list-style: none; height: 40px;
+}
+.announcement p{
+    margin: 0; position: absolute; top: 0; right: -500px; width: 950px;
+}
+
+@media screen and (max-width:1000px) {
+    #alibaba-login-iframe{
+        top: 5%;left: 16%; padding: 0;border-right: none;
+    }
+    .QRcode{
+        display: none;
+    }
+}
+
+
